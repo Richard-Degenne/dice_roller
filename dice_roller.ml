@@ -1,6 +1,9 @@
 open Core.Std
 
 let roll number die modifier () =
+  if number <= 0 then failwith "The number of dice must be positive.";
+  if die <= 0 then failwith "The die must have a positive number of faces.";
+
   let rolls = Random.self_init ();
     List.init number ~f:(fun _ -> Random.int die + 1)
   in
@@ -8,7 +11,7 @@ let roll number die modifier () =
     | None -> failwith "Error summing up the dice.\n"
     | Some e -> (e + modifier)
   in
-  printf "Dice: %s\nTotal: %d" (List.fold rolls ~init:"" ~f:(fun acc r -> acc^" "^(Int.to_string r))) total 
+  printf "Dice: %s\nTotal: %d\n" (List.fold rolls ~init:"" ~f:(fun acc r -> acc^" "^(Int.to_string r))) total 
 
 let command =
   Command.basic
