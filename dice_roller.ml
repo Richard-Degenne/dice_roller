@@ -1,9 +1,6 @@
 open Core.Std
 
-let roll number die modifier () =
-  if number <= 0 then failwith "The number of dice must be positive.";
-  if die <= 0 then failwith "The die must have a positive number of faces.";
-
+let roll number die modifier =
   let rolls = Random.self_init ();
     List.init number ~f:(fun _ -> Random.int die + 1)
   in
@@ -27,7 +24,11 @@ This software is distributed under the terms of the GNU Public License.\
       +> flag "-d" (optional_with_default 6 int) ~doc:"DIE Number of faces on the dice. Defaults to 6."
       +> flag "-m" (optional_with_default 0 int) ~doc:"MODIFIER Modifier added to the total. Defaults to 0."
     )
-    roll
+    (fun number die modifier () ->
+      if number <= 0 then failwith "The number of dice must be positive.";
+      if die <= 0 then failwith "The die must have a positive number of faces.";
+      roll number die modifier
+    )
 
 let () =
   Command.run command ~version:"0.1" ~build_info:"ocamlbuild 4.02.3"
